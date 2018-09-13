@@ -24,14 +24,71 @@ class DreamContainer extends Component {
     }
   }
 
+  _getBettingResult = () => {
+
+    let { dreams, user } = this.props
+    let deposite = this._getDream().get('deposite')
+    let bettings = dreams.get('bettings')
+    let positive = dreams.getIn(['result', 'positive'])
+    let yourBet = bettings.find(b => b.get('userEmail') === user.get('email'))
+
+    if (!yourBet) {
+      return 0
+    }
+    let yourBettingAmount = yourBet.get('amount')
+    let youWin = positive === yourBet.get('positive')
+
+    let positiveBets = bettings.filter(b => b.get('positive'))
+    let negativeBets = bettings.filter(b => !b.get('positive'))
+
+    let positivePool = positiveBets.reduce((a, b) => a + b.get('amount'), 0)
+    let negaticePool = negativeBets.reduce((a, b) => a + b.get('amount'), 0)
+
+    if (positive) {
+      if (youWin) {
+        return negaticePool/ positiveBets.size
+      } else {
+        return -yourBettingAmount
+      }
+    } else {
+      if (youWin) {
+        return (positivePool + deposite) / negativeBets.size
+      } else {
+        return -yourBettingAmount
+      }
+    }
+  }
+
+  _renderYourBettingResult = () => {
+    let net = this._getBettingResult()
+    if (net === 0) {
+      return null
+    }
+    return (
+      <div>
+        {
+          net > 0 ? `You win $${net}` : `You lose $${net * -1}`
+        }
+        <style jsx>{`
+          color: ${net > 0 ? 'green' : 'red'};
+        `}
+        </style>
+      </div>
+
+    )
+  }
   render () {
     let { dreams } = this.props
     let bettings = dreams.get('bettings')
     let dream = this._getDream()
+    let positive = dreams.getIn(['result', 'positive'])
     return !!dream ? (
       <div>
-        { dream.get('title') }
-        <h3>will it success?</h3>
+        <h3>Title: { dream.get('title') }</h3>
+        <h3>Stake: { dream.get('deposite') }</h3>
+        <h3>Betting pool: { bettings.reduce((a, b) => a + b.get('amount'), 0) }</h3>
+        <h3>Result: { positive ? 'success' : 'failure' }</h3>
+        <h3>{ this._renderYourBettingResult() }</h3>
         {
           this._notBetYet() && this._renderBetButtons()
         }
@@ -96,6 +153,7 @@ class DreamContainer extends Component {
       amount: Number(e.target.value)
     })
   }
+
   _bet = (positive) => {
     return () => {
       let { betOnDream, user } = this.props

@@ -13,18 +13,22 @@ export function createUser ({ email }) {
     let nouce = Math.random().toString(32).slice(2, 9)
     const hashDigest = sha256(nouce + email)
     const hmacDigest = Base64.stringify(hmacSHA512(hashDigest, ''))
+    let balance = 1000
 
     db.collection('users').add({
       email,
       key: hmacDigest,
+      balance,
       createdAt: new Date().getTime() / 1000
     }).then(() => {
       console.warn(`This is your key, you will need to use it to sign in: ${hashDigest}`)
       dispatch({
         type: CREATE_USER,
+        balance,
         email
       })
       window.localStorage.setItem(getKey('email'), email)
+      window.localStorage.setItem(getKey('balance'), balance)
       Router.push('/home')
     })
   }
@@ -34,9 +38,11 @@ export const CHECK_USER = Symbol('CHECK_USER')
 export function checkUser () {
   return (dispatch) => {
     let email = window.localStorage.getItem(getKey('email'))
+    let balance = window.localStorage.getItem(getKey('balance'))
     dispatch({
       type: CREATE_USER,
       email,
+      balance
     })
   }
 }
