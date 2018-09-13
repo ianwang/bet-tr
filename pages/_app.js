@@ -1,8 +1,30 @@
 import { withRouter } from 'next/router'
 import App, { Container } from 'next/app'
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import JssProvider from 'react-jss/lib/JssProvider';
+import getPageContext from 'libs/getPageContext';
+
 import Layout from 'components/Layout'
 
+import { initFirebase } from 'libs/firebase'
+
 class MyApp extends App {
+
+  constructor(props) {
+    super(props);
+    this.pageContext = getPageContext();
+  }
+
+  pageContext = null;
+
+  componentDidMount () {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+    initFirebase()
+  }
   render () {
     const { Component, pageProps, router } = this.props
     const { asPath, pathname, query } = router
@@ -13,9 +35,21 @@ class MyApp extends App {
     }
     return (
       <Container>
-        <Layout>
-          <Component {...pageProps} url={url} />
-        </Layout>
+        <JssProvider
+          registry={this.pageContext.sheetsRegistry}
+          generateClassName={this.pageContext.generateClassName}>
+          <MuiThemeProvider
+            theme={this.pageContext.theme}
+            sheetsManager={this.pageContext.sheetsManager}>
+            <CssBaseline />
+            <Layout>
+              <Component
+                pageContext={this.pageContext}
+                {...pageProps}
+                url={url} />
+            </Layout>
+          </MuiThemeProvider>
+        </JssProvider>
       </Container>
     )
   }
