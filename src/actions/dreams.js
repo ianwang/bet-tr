@@ -58,3 +58,30 @@ export function betOnDream ({
     })
   }
 }
+
+export function createResult ({ dreamId, positive }) {
+  let db = getDatabaseConnection()
+  return (dispatch) => {
+    db.collection('results').add({
+      dreamId,
+      createdAt: new Date().getTime() / 1000,
+      positive
+    })
+  }
+}
+
+export const GET_DREAM_RESULT = Symbol('GET_DREAM_RESULT')
+export function getDreamResult ({ dreamId }) {
+  let db = getDatabaseConnection()
+  return (dispatch) => {
+    let ref = db.collection('results')
+    let query = ref.where('dreamId', '==', dreamId)
+
+    query.onSnapshot((querySnapshot) => {
+      dispatch({
+        type: GET_DREAM_RESULT,
+        response: querySnapshot.docs.map(d => d.data())[0]
+      })
+    })
+  }
+}

@@ -4,6 +4,7 @@ import * as ActionType from 'actions/dreams'
 export const initialState = Immutable.fromJS({
   list: [],
   bettings: [],
+  result: {},
   bettingsLoaded: false
 })
 
@@ -17,6 +18,9 @@ export default function (state = initialState, action) {
     case ActionType.GET_DREAM_BETTINGS:
       return state.set('bettings', Immutable.fromJS(action.response))
         .set('bettingsLoaded', true)
+
+    case ActionType.GET_DREAM_RESULT:
+      return state.merge({ result: action.response })
 
     default:
       return state

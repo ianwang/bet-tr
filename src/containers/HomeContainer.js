@@ -19,7 +19,7 @@ class HomeContainer extends Component {
       <div>
         { user.get('email') }
         <section>
-          coin
+          ${ user.get('balance') }
         </section>
         <section className='list'>
           {

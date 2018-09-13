@@ -8,15 +8,20 @@ import { checkUser } from 'actions/user'
 import {
   getAllDreams,
   getDreamBettings,
+  getDreamResult,
+  createResult,
   betOnDream } from 'actions/dreams'
 
 class DreamContainer extends Component {
   componentDidMount () {
+    let dreamId = this._getId()
     this.props.checkUser()
     this.props.getAllDreams()
-    this.props.getDreamBettings({
-      dreamId: this._getId()
-    })
+    this.props.getDreamBettings({ dreamId })
+    this.props.getDreamResult({ dreamId })
+    window.createResult = (positive) => {
+      this.props.createResult({ dreamId, positive })
+    }
   }
 
   render () {
@@ -131,6 +136,8 @@ DreamContainer.propTypes = {
   checkUser: PropTypes.func.isRequired,
   betOnDream: PropTypes.func.isRequired,
   getDreamBettings: PropTypes.func.isRequired,
+  createResult: PropTypes.func.isRequired,
+  getDreamResult: PropTypes.func.isRequired,
   getAllDreams: PropTypes.func.isRequired
 }
 
@@ -138,6 +145,8 @@ export { DreamContainer }
 export default connect(mapStateToProps, {
   checkUser,
   betOnDream,
+  createResult,
   getDreamBettings,
+  getDreamResult,
   getAllDreams
 })(DreamContainer)

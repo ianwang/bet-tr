@@ -24,10 +24,7 @@ export function createUser ({ email }) {
         type: CREATE_USER,
         email
       })
-      window.localStorage.setItem(
-        getKey('email'),
-        email
-      )
+      window.localStorage.setItem(getKey('email'), email)
       Router.push('/home')
     })
   }
@@ -36,12 +33,10 @@ export function createUser ({ email }) {
 export const CHECK_USER = Symbol('CHECK_USER')
 export function checkUser () {
   return (dispatch) => {
-    let email = window.localStorage.getItem(
-      getKey('email')
-    )
+    let email = window.localStorage.getItem(getKey('email'))
     dispatch({
       type: CREATE_USER,
-      email
+      email,
     })
   }
 }
