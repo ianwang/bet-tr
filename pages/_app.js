@@ -38,7 +38,7 @@ class MyApp extends App {
           <MuiThemeProvider
             theme={this.pageContext.theme}
             sheetsManager={this.pageContext.sheetsManager}>
-            <CssBaseline />
+
             <Layout>
               <Component
                 pageContext={this.pageContext}
