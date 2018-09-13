@@ -17,10 +17,6 @@ export function initFirebase () {
   } catch (e) {
     let app = firebase.app()
     window.db = getDatabaseConnection()
-
-    window.createData = function () {
-
-    }
     return app
   }
 }

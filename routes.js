@@ -7,6 +7,9 @@ const APP_ROUTES = [{
 }, {
   page: 'home',
   pattern: '/home'
+}, {
+  page: 'ui',
+  pattern: '/ui'
 }]
 
 APP_ROUTES.forEach(route => routes.add(route))
