@@ -10,6 +10,9 @@ const APP_ROUTES = [{
 }, {
   page: 'ui',
   pattern: '/ui'
+}, {
+  page: 'dream',
+  pattern: '/dreams/:id'
 }]
 
 APP_ROUTES.forEach(route => routes.add(route))

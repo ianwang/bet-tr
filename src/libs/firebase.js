@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
+let _init = false
 export function initFirebase () {
   const config = {
     apiKey: 'AIzaSyC4rlTyBjRIB4pr7zaSWgtSuHQUWV1DV1g',
@@ -11,21 +12,26 @@ export function initFirebase () {
     messagingSenderId: '902182608097'
   }
   try {
-    let app = firebase.initializeApp(config)
-    window.db = getDatabaseConnection()
-    return app
+    _init = true
+    return firebase.initializeApp(config)
   } catch (e) {
-    let app = firebase.app()
-    window.db = getDatabaseConnection()
-    return app
+    return firebase.app(config)
   }
 }
 
 export function getDatabaseConnection () {
+  if (!_init) {
+    initFirebase()
+  }
+
   const db = firebase.firestore()
   db.settings({
     timestampsInSnapshots: true
   })
+  if (typeof window !== 'undefined') {
+    window.db = db
+  }
+
   return db
 }
 

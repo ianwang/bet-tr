@@ -7,8 +7,6 @@ import getPageContext from 'libs/getPageContext';
 
 import Layout from 'components/Layout'
 
-import { initFirebase } from 'libs/firebase'
-
 class MyApp extends App {
 
   constructor(props) {
@@ -23,7 +21,6 @@ class MyApp extends App {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
-    initFirebase()
   }
   render () {
     const { Component, pageProps, router } = this.props

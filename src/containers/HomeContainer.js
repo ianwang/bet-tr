@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
+import { Map, List } from 'immutable'
 import PropTypes from 'prop-types'
+import { Link } from '../../routes'
+
 import { connect } from 'react-redux'
 import { checkUser } from 'actions/user'
+import { getAllDreams } from 'actions/dreams'
 
 class HomeContainer extends Component {
-  static async getInitialProps ({ store }) {
-  }
   componentDidMount () {
     this.props.checkUser()
+    this.props.getAllDreams()
   }
 
   render () {
-    let { user } = this.props
+    let { user, dreams } = this.props
     return (
       <div>
         { user.get('email') }
@@ -19,7 +22,16 @@ class HomeContainer extends Component {
           coin
         </section>
         <section className='list'>
-          list
+          {
+            dreams.map(d => {
+              let id = d.get('randomKey')
+              return (
+                <Link key={id} route={`/dreams/${id}`}>
+                  { d.get('title') }
+                </Link>
+              )
+            })
+          }
         </section>
         <section className='bottom'>
           nav
@@ -32,16 +44,20 @@ class HomeContainer extends Component {
 
 function mapStateToProps (state) {
   return {
-    user: state.user
+    user: state.user,
+    dreams: state.dreams.get('list')
   }
 }
 
 HomeContainer.propTypes = {
   user: PropTypes.instanceOf(Map).isRequired,
-  checkUser: PropTypes.func.isRequired
+  dreams: PropTypes.instanceOf(List).isRequired,
+  checkUser: PropTypes.func.isRequired,
+  getAllDreams: PropTypes.func.isRequired
 }
 
 export { HomeContainer }
 export default connect(mapStateToProps, {
-  checkUser
+  checkUser,
+  getAllDreams
 })(HomeContainer)
