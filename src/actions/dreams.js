@@ -1,6 +1,5 @@
 import { getDatabaseConnection } from 'libs/firebase'
 
-
 export const getKey = (name) => `_dd_${name}`
 
 export const CREATE_DREAM = Symbol('CREATE_DREAM')
@@ -45,21 +44,17 @@ export function getDreamBettings ({ dreamId }) {
 }
 
 export const BET_ON_DREAM = Symbol('BET_ON_DREAM')
-export function betOnDream ({ dreamId, amount, positive }) {
+export function betOnDream ({
+  userEmail, dreamId, amount, positive
+}) {
   let db = getDatabaseConnection()
   return (dispatch) => {
     db.collection('bettings').add({
       dreamId,
       amount,
+      createdAt: new Date().getTime() / 1000,
+      userEmail,
       positive
-    }).then((querySnapshot) => {
-      dispatch({
-        dreamId,
-        amount,
-        positive,
-        createdAt: new Date().getTime() / 1000,
-        type: BET_ON_DREAM
-      })
     })
   }
 }

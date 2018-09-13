@@ -52,11 +52,11 @@ class DreamContainer extends Component {
   }
 
   _notBetYet = () => {
-    let { user, bettingsLoaded, bettings } = this.props
-    if (!bettingsLoaded) {
+    let { user, dreams } = this.props
+    if (!dreams.get('bettingsLoaded')) {
       return false
     }
-    return !bettings.some(b => (
+    return !dreams.get('bettings').some(b => (
       b.get('userEmail') === user.get('email')
     ))
   }
@@ -93,13 +93,14 @@ class DreamContainer extends Component {
   }
   _bet = (positive) => {
     return () => {
-      let { betOnDream } = this.props
+      let { betOnDream, user } = this.props
       let { amount } = this.state
       if (!amount) {
         return alert('You must enter an amount')
       }
       betOnDream({
         dreamId: this._getId(),
+        userEmail: user.get('email'),
         amount,
         positive
       })
