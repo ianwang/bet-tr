@@ -29,7 +29,7 @@ export function createUser ({ email }) {
       })
       window.localStorage.setItem(getKey('email'), email)
       window.localStorage.setItem(getKey('balance'), balance)
-      Router.push('/home')
+      Router.push('/dreams/oqidj12oid')
     })
   }
 }

@@ -20,7 +20,7 @@ export default function (state = initialState, action) {
         .set('bettingsLoaded', true)
 
     case ActionType.GET_DREAM_RESULT:
-      return state.merge({ result: action.response })
+      return state.merge({ result: action.response || {} })
 
     default:
       return state

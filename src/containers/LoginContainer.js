@@ -17,7 +17,6 @@ class LoginContainer extends Component {
           <h1>Bet.tr</h1>
           <h2>Make bets on a better you</h2>
         </header>
-        
         <div className="home-cover">
           <img width="300" src="https://cdn.dribbble.com/users/754899/screenshots/3662293/fantasy_antelope.gif"/>
         </div>
@@ -28,7 +27,7 @@ class LoginContainer extends Component {
             label='Enter your email'
             className='login-input'
             onChange={this._updateUserName} />
-          
+
           <Button
             variant='contained'
             className='login-button'
